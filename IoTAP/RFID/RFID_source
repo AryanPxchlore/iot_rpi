@@ -1,0 +1,22 @@
+RFID
+python3 -m venv venv
+
+source venv/bin/activate
+
+(venv) pi@raspberrypi:~/rfid_project $
+pip install mfrc522 RPi.GPIO
+
+git clone https://github.com/pimylifeup/MFRC522-python.git
+cd MFRC522-python
+sudo python3 setup.py install
+
+
+RFID Pin	Raspberry Pi 5 Physical Pin	GPIO Number	Description
+SDA (SS)	Pin 24	GPIO8	SPI0 Chip Select
+SCK	Pin 23	GPIO11	SPI0 Clock
+MOSI	Pin 19	GPIO10	SPI0 Master Out
+MISO	Pin 21	GPIO9	SPI0 Master In
+IRQ	Not connected (Optional)	-	Interrupt Request
+GND	Pin 6 or Pin 9	GND	Ground
+RST (Reset)	Pin 22	GPIO25	Reset Pin
+3.3V Power	Pin 1 or Pin 17	3.3V Power	Power Supply
