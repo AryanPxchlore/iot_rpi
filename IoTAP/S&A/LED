@@ -1,0 +1,79 @@
+LED Flashing interface with RPI 5
+sudo apt-get install python3-rpi.gpio
+Place the LED on a breadboard.
+    • Connect the longer leg (anode) of the LED to a GPIO pin via a jumper wire (e.g., GPIO3 / physical pin 5).
+    • Connect a 220Ω resistor from the shorter leg (cathode) to the ground rail.
+    • Use another jumper wire to connect the ground rail or the other end of the resistor to one of the GND pins (e.g., pin 6 or 9).
+
+
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BOARD)           # Use physical pin numbers
+GPIO.setup(5, GPIO.OUT)            # Set GPIO pin 5 (physical) as output
+
+# Blink LED 5 times
+for i in range(5):
+    GPIO.output(5, GPIO.HIGH)      # LED ON
+    time.sleep(1)                  # Wait 1 second
+    GPIO.output(5, GPIO.LOW)       # LED OFF
+    time.sleep(1)
+
+GPIO.cleanup()                     # Clean up GPIO settings
+
+
+Interfacing of two LED’s to Raspberry pi and make it ON/OFF alternatively
+
+Two LEDs: Pin Wiring and Blinking
+    • LED1: Connect the positive (anode) leg to physical pin 11 (GPIO17) through a 220Ω resistor; negative (cathode) to GND (e.g., physical pin 6).
+    • LED2: Connect the positive (anode) leg to physical pin 12 (GPIO18) through a 220Ω resistor; negative (cathode) to GND.
+
+import RPi.GPIO as GPIO
+import time
+
+LED1 = 17  # GPIO17
+LED2 = 18  # GPIO18
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(LED1, GPIO.OUT)
+GPIO.setup(LED2, GPIO.OUT)
+
+try:
+    while True:
+        GPIO.output(LED1, 1)     # LED1 ON
+        GPIO.output(LED2, 0)     # LED2 OFF
+        time.sleep(1)
+        GPIO.output(LED1, 0)     # LED1 OFF
+        GPIO.output(LED2, 1)     # LED2 ON
+        time.sleep(1)
+except KeyboardInterrupt:
+    GPIO.cleanup()
+
+    • Interfacing LED and Buzzer to Raspberry pi
+
+LED and Buzzer: Pin Wiring and Blinking
+    • LED: Positive to physical pin 12 (GPIO18) through 220Ω resistor, negative to GND.
+    • Buzzer: Positive to physical pin 16 (GPIO23), negative to GND (or another suitable GPIO, e.g., pin 36 for GPIO16).
+
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BOARD)
+
+LED = 12        # Pin 12 = GPIO18
+BUZZER = 16     # Pin 16 = GPIO23
+
+GPIO.setup(LED, GPIO.OUT)
+GPIO.setup(BUZZER, GPIO.OUT)
+
+try:
+    for i in range(5):
+        GPIO.output(LED, 1)
+        GPIO.output(BUZZER, 1)
+        time.sleep(1)
+        GPIO.output(LED, 0)
+        GPIO.output(BUZZER, 0)
+        time.sleep(1)
+except KeyboardInterrupt:
+    GPIO.cleanup()
+Use Pin 6, Pin 9, Pin 14, Pin 20, Pin 25, Pin 30, Pin 34, or Pin 39 for GND connections.
