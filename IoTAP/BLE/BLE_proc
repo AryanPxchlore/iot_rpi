@@ -1,0 +1,72 @@
+
+BLE Module Pin	Raspberry Pi Physical Pin	GPIO Number	Description
+VCC	Pin 1 or Pin 17	3.3V or 5V	Power Supply
+GND	Pin 6 or Pin 9	GND	Ground
+TX	Pin 10	GPIO15 (UART RX)	UART Receive
+RX	Pin 8	GPIO14 (UART TX)	UART Transmit
+
+1 Enable UART
+sudo raspi-config
+
+Go to Interface Options → Enable Serial Port
+
+Disable login shell over serial
+
+Enable serial hardware
+2. Reboot Raspberry Pi
+
+sudo reboot
+3. Install Python Serial package
+
+pip install pyserial
+4. Use this code for execution
+To check the serial port:  Run in terminal:
+
+ls -l /dev/serial*
+dev/serial0 -> ttyAMA0
+/dev/serial1 -> ttyS0
+Make sure serial is enabled:
+
+grep -i uart /boot/firmware/config.txt
+You should see something like:
+
+enable_uart=1
+
+
+If not, add this line:
+
+sudo nano /boot/firmware/config.txt
+
+
+Add:
+
+enable_uart=1
+
+
+Save (CTRL+O, Enter) and reboot:
+
+sudo reboot
+
+BLE CODE:
+
+import serial
+import time
+
+# Open serial port for HC-05
+# Change /dev/serial0 to /dev/ttyAMA0 or /dev/ttyS0 if needed
+uart_channel = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=1)
+
+print("Waiting for data from HC-05...")
+
+try:
+    while True:
+        if uart_channel.in_waiting > 0:  # Check if data is available
+            data = uart_channel.readline().decode('utf-8', errors='ignore').strip()
+            if data:
+                print("Received:", data)
+        time.sleep(0.1)  # Avoid CPU overuse
+except KeyboardInterrupt:
+    print("Exiting...")
+finally:
+    uart_channel.close()
+
